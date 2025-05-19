@@ -80,4 +80,6 @@ lista.pack(pady=20)
 
 listar()
 
-janela.mainloop()
+janela.mainloop() 
+
+#by celinh
