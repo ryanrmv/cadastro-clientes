@@ -1,34 +1,44 @@
-import mysql.connector
+import sqlite3
 
 def conectar():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",  # altere se tiver senha
-        database="cadastro"
-    )
+    return sqlite3.connect("clientes.db")
+
+def criar_tabela():
+    conn = conectar()
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS clientes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT,
+            sobrenome TEXT,
+            cpf TEXT,
+            telefone TEXT,
+            senha TEXT
+        )
+    """)
+    conn.commit()
+    conn.close()
 
 def inserir_cliente(nome, sobrenome, cpf, telefone, senha):
     conn = conectar()
     cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO clientes (nome, sobrenome, cpf, telefone, senha) VALUES (%s, %s, %s, %s, %s)",
-        (nome, sobrenome, cpf, telefone, senha)
-    )
+    cursor.execute("INSERT INTO clientes (nome, sobrenome, cpf, telefone, senha) VALUES (?, ?, ?, ?, ?)",
+                   (nome, sobrenome, cpf, telefone, senha))
     conn.commit()
     conn.close()
 
 def buscar_clientes():
     conn = conectar()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, nome, sobrenome, cpf FROM clientes")
-    resultado = cursor.fetchall()
+    cursor.execute("SELECT * FROM clientes")
+    clientes = cursor.fetchall()
     conn.close()
-    return resultado
+    return clientes
 
-def excluir_cliente(id_cliente):
+def excluir_cliente(cliente_id):
     conn = conectar()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM clientes WHERE id = %s", (id_cliente,))
+    cursor.execute("DELETE FROM clientes WHERE id = ?", (cliente_id,))
     conn.commit()
     conn.close()
+
