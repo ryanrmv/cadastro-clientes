@@ -1,47 +1,49 @@
-# Cadastro de Clientes
+# Cadastro de Clientes (Python + SQLite)
+## ✅ Funcionalidades
 
-Sistema de cadastro de clientes com interface gráfica em Python e banco de dados MySQL.
+- Cadastrar novos clientes com os seguintes dados:
+  - Nome
+  - Sobrenome
+  - CPF
+  - Telefone
+  - Senha (com confirmação)
+- Listar clientes cadastrados
+- Excluir clientes da lista
+- Interface gráfica com Tkinter
+- Banco de dados local com SQLite (sem necessidade de servidor externo)
+- Compatível com geração de executável `.exe` usando PyInstaller
 
-## 💻 Tecnologias Utilizadas
+## 📦 Requisitos
 
-- Python 3.x
-- Tkinter (interface gráfica)
-- MySQL (via XAMPP)
-- mysql-connector-python
+- Python 3.8 ou superior
+- Módulo `tkinter` (já incluído no Python)
+- Módulo `sqlite3` (já incluído no Python)
 
-## ⚙️ Funcionalidades
+## ▶️ Como executar
 
-- Cadastrar novos clientes
-- Excluir clientes cadastrados
-- Listar todos os clientes
-- Validação de senha
-
-## 🛠 Como executar o projeto
-
-1. Instale o conector do MySQL:
+1. Clone o repositório:
    ```bash
-   pip install mysql-connector-python
+   git clone https://github.com/seu-usuario/seu-repositorio.git
+   cd seu-repositorio
+2.Execute o programa:
+`python app.py`
 
-   
-CREATE DATABASE cadastro;
-
-USE cadastro;
-
-CREATE TABLE clientes (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nome VARCHAR(50),
-  sobrenome VARCHAR(50),
-  cpf VARCHAR(14),
-  telefone VARCHAR(20),
-  senha VARCHAR(100)
-);
-
-python app.py
+🛠 Como gerar o executável (.exe)
+1. Instale o PyInstaller:
+`pip install pyinstaller`
 
 
-cadastro-clientes/
-├── app.py         # Interface gráfica com Tkinter
-├── database.py    # Conexão e comandos SQL
-├── README.md      # Instruções do projeto
-└── .gitignore     # Arquivos ignorados pelo Git
+2. Gere o executável:
+`pyinstaller --onefile --windowed app.py`
+
+Estrutura do Projeto
+
+📦 projeto/
+├── app.py               # Interface gráfica
+├── database.py          # Funções de banco de dados (SQLite)
+├── clientes.db          # Banco de dados local (gerado automaticamente)
+├── README.md
+├── .gitignore
+└── dist/                # Executável gerado com PyInstaller
+
 
