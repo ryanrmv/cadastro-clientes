@@ -47,3 +47,7 @@ Estrutura do Projeto
 └── dist/                # Executável gerado com PyInstaller
 
 
+ 
+`by celinh`
+
+
