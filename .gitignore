@@ -1,7 +1,20 @@
+
+
+```gitignore
+# Ignore banco de dados local
+clientes.db
+
+# Ignore arquivos gerados pelo PyInstaller
+dist/
+build/
 __pycache__/
+*.spec
+
+# Arquivos temporários do sistema
 *.pyc
 *.pyo
-*.pyd
-.env
-*.db
 *.log
+
+# VSCode e editor configs
+.vscode/
+.env
