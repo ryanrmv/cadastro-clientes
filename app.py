@@ -1,72 +1,82 @@
 import tkinter as tk
 from tkinter import messagebox
-from database import inserir_cliente, buscar_clientes, excluir_cliente
+from database import inserir_cliente, buscar_clientes, excluir_cliente, criar_tabela
+
+# Cria tabela se não existir
+criar_tabela()
 
 def cadastrar():
-    nome = entry_nome.get()
-    sobrenome = entry_sobrenome.get()
-    cpf = entry_cpf.get()
-    telefone = entry_telefone.get()
-    senha = entry_senha.get()
-    confirmar = entry_confirmar.get()
-
-    if not (nome and sobrenome and cpf and senha and confirmar):
-        messagebox.showwarning("Erro", "Preencha todos os campos obrigatórios.")
+    if senha.get() != confirmar_senha.get():
+        messagebox.showerror("Erro", "As senhas não coincidem!")
         return
 
-    if senha != confirmar:
-        messagebox.showwarning("Erro", "As senhas não coincidem.")
-        return
-
-    inserir_cliente(nome, sobrenome, cpf, telefone, senha)
+    inserir_cliente(
+        nome.get(),
+        sobrenome.get(),
+        cpf.get(),
+        telefone.get(),
+        senha.get()
+    )
     messagebox.showinfo("Sucesso", "Cliente cadastrado com sucesso!")
     listar()
+    limpar()
 
 def listar():
     lista.delete(0, tk.END)
-    clientes = buscar_clientes()
-    for c in clientes:
-        lista.insert(tk.END, f"{c[0]} - {c[1]} {c[2]} - CPF: {c[3]}")
+    for cliente in buscar_clientes():
+        lista.insert(tk.END, f"{cliente[0]} - {cliente[1]} {cliente[2]} - CPF: {cliente[3]} - Tel: {cliente[4]}")
 
-def excluir():
+def deletar():
     selecionado = lista.curselection()
     if selecionado:
-        item = lista.get(selecionado)
-        id_cliente = int(item.split(" - ")[0])
-        excluir_cliente(id_cliente)
-        messagebox.showinfo("Removido", "Cliente excluído com sucesso.")
+        cliente_id = int(lista.get(selecionado).split(" - ")[0])
+        excluir_cliente(cliente_id)
         listar()
+    else:
+        messagebox.showwarning("Atenção", "Selecione um cliente para excluir.")
 
-# Interface
+def limpar():
+    nome.delete(0, tk.END)
+    sobrenome.delete(0, tk.END)
+    cpf.delete(0, tk.END)
+    telefone.delete(0, tk.END)
+    senha.delete(0, tk.END)
+    confirmar_senha.delete(0, tk.END)
+
+# Interface gráfica
 janela = tk.Tk()
 janela.title("Cadastro de Clientes")
+janela.geometry("500x500")
 
-tk.Label(janela, text="Nome").grid(row=0, column=0)
-tk.Label(janela, text="Sobrenome").grid(row=1, column=0)
-tk.Label(janela, text="CPF").grid(row=2, column=0)
-tk.Label(janela, text="Telefone").grid(row=3, column=0)
-tk.Label(janela, text="Senha").grid(row=4, column=0)
-tk.Label(janela, text="Confirmar Senha").grid(row=5, column=0)
+tk.Label(janela, text="Nome").pack()
+nome = tk.Entry(janela)
+nome.pack()
 
-entry_nome = tk.Entry(janela)
-entry_sobrenome = tk.Entry(janela)
-entry_cpf = tk.Entry(janela)
-entry_telefone = tk.Entry(janela)
-entry_senha = tk.Entry(janela, show="*")
-entry_confirmar = tk.Entry(janela, show="*")
+tk.Label(janela, text="Sobrenome").pack()
+sobrenome = tk.Entry(janela)
+sobrenome.pack()
 
-entry_nome.grid(row=0, column=1)
-entry_sobrenome.grid(row=1, column=1)
-entry_cpf.grid(row=2, column=1)
-entry_telefone.grid(row=3, column=1)
-entry_senha.grid(row=4, column=1)
-entry_confirmar.grid(row=5, column=1)
+tk.Label(janela, text="CPF").pack()
+cpf = tk.Entry(janela)
+cpf.pack()
 
-tk.Button(janela, text="Cadastrar", command=cadastrar).grid(row=6, column=0, columnspan=2, pady=5)
-tk.Button(janela, text="Excluir Selecionado", command=excluir).grid(row=7, column=0, columnspan=2, pady=5)
+tk.Label(janela, text="Telefone").pack()
+telefone = tk.Entry(janela)
+telefone.pack()
 
-lista = tk.Listbox(janela, width=50)
-lista.grid(row=8, column=0, columnspan=2)
+tk.Label(janela, text="Senha").pack()
+senha = tk.Entry(janela, show="*")
+senha.pack()
+
+tk.Label(janela, text="Confirmar Senha").pack()
+confirmar_senha = tk.Entry(janela, show="*")
+confirmar_senha.pack()
+
+tk.Button(janela, text="Cadastrar", command=cadastrar).pack(pady=10)
+tk.Button(janela, text="Excluir Selecionado", command=deletar).pack()
+
+lista = tk.Listbox(janela, width=80)
+lista.pack(pady=20)
 
 listar()
 
